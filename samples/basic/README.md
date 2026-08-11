@@ -1,9 +1,9 @@
-# Default reflection binder sample
+# Basic sample
 
 Run from the repository root:
 
 ```bash
-./kotlin run --module samples-reflection
+./kotlin run --module samples/basic
 ```
 
 The server listens on `http://localhost:8080`.

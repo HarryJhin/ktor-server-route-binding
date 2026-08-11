@@ -1,9 +1,9 @@
-# Jackson sample
+# Gson sample
 
 Run from the repository root:
 
 ```bash
-./kotlin run --module samples-jackson
+./kotlin run --module samples/gson
 ```
 
 The server listens on `http://localhost:8080`.
@@ -16,4 +16,4 @@ curl -X POST 'http://localhost:8080/users?role=admin' \
   -d '{"id":42,"name":"Harry"}'
 ```
 
-The first request omits `includeDetails` and `role`, so their Kotlin defaults (`false` and `null`) are used. The sample configures Ktor `ContentNegotiation` and Route Binding with the same `ObjectMapper` instance.
+The first request omits `includeDetails` and `role`, so their Kotlin defaults (`false` and `null`) are used. The sample configures Ktor `ContentNegotiation` and Route Binding with the same `Gson` instance.

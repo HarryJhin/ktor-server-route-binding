@@ -138,10 +138,10 @@ Each binder has a runnable Ktor application with the same typed path/query bindi
 
 | Binder | Module | Run |
 | --- | --- | --- |
-| kotlinx.serialization JSON | [`samples`](samples) | `./kotlin run --module samples` |
-| Gson | [`samples-gson`](samples-gson) | `./kotlin run --module samples-gson` |
-| Jackson | [`samples-jackson`](samples-jackson) | `./kotlin run --module samples-jackson` |
-| Default reflection binder | [`samples-reflection`](samples-reflection) | `./kotlin run --module samples-reflection` |
+| kotlinx.serialization JSON | [`samples/kotlinx-json`](samples/kotlinx-json) | `./kotlin run --module samples/kotlinx-json` |
+| Gson | [`samples/gson`](samples/gson) | `./kotlin run --module samples/gson` |
+| Jackson | [`samples/jackson`](samples/jackson) | `./kotlin run --module samples/jackson` |
+| Basic (default reflection binder) | [`samples/basic`](samples/basic) | `./kotlin run --module samples/basic` |
 
 See each sample's README for `curl` requests.
 

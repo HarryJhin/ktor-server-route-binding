@@ -1,16 +1,15 @@
 product: jvm/app
 
 apply:
-  - ../ktor.module-template.yaml
+  - ../../ktor.module-template.yaml
 
-description: Runnable kotlinx.serialization JSON sample for Ktor Server Route Binding.
+description: Runnable basic sample for Ktor Server Route Binding.
 
 repositories:
   - https://central.sonatype.com/repository/maven-snapshots/
 
 dependencies:
   - io.github.harryjhin:ktor-server-route-binding:0.0.1-SNAPSHOT
-  - io.github.harryjhin:ktor-server-route-binding-serialization-kotlinx-json:0.0.1-SNAPSHOT
   - io.ktor:ktor-server-content-negotiation
   - io.ktor:ktor-server-netty
   - io.ktor:ktor-serialization-kotlinx-json
@@ -20,4 +19,4 @@ settings:
   kotlin:
     serialization: json
   jvm:
-    mainClass: io.github.harryjhin.routebinding.samples.ApplicationKt
+    mainClass: io.github.harryjhin.routebinding.samples.basic.ApplicationKt

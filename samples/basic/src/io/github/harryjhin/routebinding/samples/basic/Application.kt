@@ -1,4 +1,4 @@
-package io.github.harryjhin.routebinding.samples.reflection
+package io.github.harryjhin.routebinding.samples.basic
 
 import io.github.harryjhin.routebinding.RouteBinding
 import io.github.harryjhin.routebinding.created

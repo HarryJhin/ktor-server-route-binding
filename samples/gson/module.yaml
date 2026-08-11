@@ -1,7 +1,7 @@
 product: jvm/app
 
 apply:
-  - ../ktor.module-template.yaml
+  - ../../ktor.module-template.yaml
 
 description: Runnable Gson sample for Ktor Server Route Binding.
 
