@@ -8,7 +8,7 @@ Typed path and query parameter binding for [Ktor Server](https://ktor.io/). Rout
 
 ## Quick start
 
-Add the core module and one binder that matches the serialization converter used by your application. Replace `<version>` with the version shown in the Maven Central badge.
+Add the core module. Replace `<version>` with the version shown in the Maven Central badge. The Ktor BOM is the only place that selects a Ktor version.
 
 ```kotlin
 repositories {
@@ -16,21 +16,26 @@ repositories {
 }
 
 dependencies {
-    val ktorVersion = "3.5.1"
-
-    implementation(platform("io.ktor:ktor-bom:$ktorVersion"))
+    implementation(platform("io.ktor:ktor-bom:<ktor-version>"))
     implementation("io.github.harryjhin:ktor-server-route-binding:<version>")
-    implementation("io.github.harryjhin:ktor-server-route-binding-serialization-kotlinx-json:<version>")
-    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("io.ktor:ktor-server-content-negotiation")
 }
 ```
+
+Add one binder module only when its serialization policy should also bind path and query parameters.
+
+| Binder | Dependency | `RouteBinding` configuration |
+| --- | --- | --- |
+| Basic | None | `install(RouteBinding)` |
+| kotlinx.serialization JSON | `ktor-server-route-binding-serialization-kotlinx-json` and `ktor-serialization-kotlinx-json` | `kotlinxSerialization(json)` |
+| Gson | `ktor-server-route-binding-serialization-gson` and `ktor-serialization-gson` | `gson(gson)` |
+| Jackson | `ktor-server-route-binding-serialization-jackson` and `ktor-serialization-jackson` | `jackson(objectMapper)` |
 
 ## Compatibility
 
 Route Binding supports Ktor 3.x. CI verifies the latest patch release in every supported Ktor 3 minor line. Use the Ktor BOM to select one Ktor version for the entire application.
 
-Configure Ktor's JSON converter and Route Binding with the same `Json` instance. Then declare typed routes.
+Configure Ktor's JSON converter and Route Binding with the same `Json` instance. Then declare typed routes. Omitted query parameters use the Kotlin default declared in the parameter model.
 
 ```kotlin
 import io.github.harryjhin.routebinding.RouteBinding
@@ -58,8 +63,8 @@ fun Application.module() {
     }
     routing {
         get<UserParams>("/users/{id}") { params ->
-            // GET /users/42?includeDetails=true
-            ok { UserResponse(params.id, params.includeDetails) }
+            // GET /users/42
+            ok { UserResponse(params.id, params.includeDetails, role = params.role) }
         }
         post<UserRole, RegisterUserRequest>("/users") { params, body ->
             // POST /users?role=admin
@@ -72,6 +77,7 @@ fun Application.module() {
 data class UserParams(
     val id: Long,
     val includeDetails: Boolean = false,
+    val role: String? = null,
 )
 
 @Serializable
@@ -97,6 +103,21 @@ data class UserResponse(
 - Sends the `HttpResult` returned by the handler through Ktor's response pipeline.
 
 Route Binding does not replace Ktor routing, request validation, authentication, or content negotiation.
+
+## Optional query parameters
+
+Use Kotlin defaults to make path and query parameters optional. This keeps the DTO contract explicit and works with the built-in reflection binder and every serialization binder.
+
+```kotlin
+@Serializable
+data class UserFilter(
+    val page: Int = 1,
+    val size: Int = 20,
+    val query: String? = null,
+)
+```
+
+`GET /users` binds `page` to `1`, `size` to `20`, and `query` to `null`. `GET /users?query=ktor` overrides only `query`.
 
 ## Typed routing methods
 
@@ -131,6 +152,24 @@ Choose exactly one module that matches the converter registered in `ContentNegot
 | Gson | `ktor-server-route-binding-serialization-gson` | `gson(gson)` |
 
 Pass the same `Json`, `ObjectMapper`, or `Gson` instance to both plugins. That keeps property names, defaults, and naming policies consistent between request parameters and request bodies.
+
+When no module is configured, Route Binding uses its built-in reflection binder. The reflection binder supports Kotlin constructor parameters, scalar types, enums, value classes, and repeated parameters for `List` and `Set`.
+
+## Responses
+
+Route handlers return an `HttpResult`. Use the status helpers for common responses, or use `response { ... }` when the status is application-specific.
+
+```kotlin
+get<UserParams>("/users/{id}") { params ->
+    findUser(params.id)?.let { user -> ok { user } } ?: notFound()
+}
+
+post<CreateUserRequest>("/users") { body ->
+    created { createUser(body) }
+}
+```
+
+Helpers cover successful responses (`ok`, `created`, `accepted`, `noContent`), client errors (`badRequest`, `unauthorized`, `forbidden`, `notFound`, `conflict`), and server errors (`internalServerError`, `badGateway`, `serviceUnavailable`).
 
 ## Samples
 
