@@ -2,9 +2,38 @@ name: Ktor Compatibility
 
 on:
   pull_request:
+    paths:
+      - 'core/**'
+      - 'serialization-gson/**'
+      - 'serialization-jackson/**'
+      - 'serialization-kotlinx-json/**'
+      - 'samples/**'
+      - 'ktor.module-template.yaml'
+      - 'project.yaml'
+      - 'scripts/test-ktor-compatibility.sh'
+      - '.github/workflows/ktor-compatibility.yml'
+      - '.github/workflows/publish.yml'
+      - 'kotlin'
+      - 'kotlin.bat'
   push:
     branches:
       - main
+    paths:
+      - 'core/**'
+      - 'serialization-gson/**'
+      - 'serialization-jackson/**'
+      - 'serialization-kotlinx-json/**'
+      - 'samples/**'
+      - 'ktor.module-template.yaml'
+      - 'project.yaml'
+      - 'scripts/test-ktor-compatibility.sh'
+      - '.github/workflows/ktor-compatibility.yml'
+      - '.github/workflows/publish.yml'
+      - 'kotlin'
+      - 'kotlin.bat'
+  schedule:
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
 
 permissions:
   contents: read
