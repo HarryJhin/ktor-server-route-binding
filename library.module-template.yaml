@@ -2,7 +2,7 @@ settings:
   publishing:
     enabled: true
     group: io.github.harryjhin
-    version: 0.1.0
+    version: 0.0.1
     mavenCentral: enabled
     signArtifacts: true
     publishSources: true

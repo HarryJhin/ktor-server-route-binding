@@ -2,7 +2,7 @@
 
 set -eu
 
-snapshot_version="${1:-0.1.0-SNAPSHOT}"
+snapshot_version="${1:-0.0.2-SNAPSHOT}"
 case "$snapshot_version" in
   *-SNAPSHOT) ;;
   *)

@@ -6,7 +6,7 @@ on:
       version:
         description: Development version ending in -SNAPSHOT
         required: true
-        default: 0.1.0-SNAPSHOT
+        default: 0.0.2-SNAPSHOT
         type: string
 
 permissions:

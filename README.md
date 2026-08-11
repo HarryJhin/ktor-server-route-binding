@@ -159,7 +159,7 @@ repositories {
 ```
 
 ```bash
-./scripts/publish-snapshot.sh 0.0.1-SNAPSHOT
+./scripts/publish-snapshot.sh 0.0.2-SNAPSHOT
 ```
 
 When the required Toolchain environment variables are absent, the script reads the existing Gradle properties `mavenCentralUsername`, `mavenCentralPassword`, `signingInMemoryKey`, and `signingInMemoryKeyPassword` from `$GRADLE_USER_HOME/gradle.properties` or `~/.gradle/gradle.properties`.
