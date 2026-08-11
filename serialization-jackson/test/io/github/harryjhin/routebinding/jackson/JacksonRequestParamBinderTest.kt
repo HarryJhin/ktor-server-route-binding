@@ -20,6 +20,22 @@ import kotlin.test.assertEquals
 
 class JacksonRequestParamBinderTest {
     @Test
+    fun `binds omitted nullable query parameters to their defaults`() = testApplication {
+        val objectMapper = ObjectMapper().registerKotlinModule()
+
+        application {
+            install(RouteBinding) { jackson(objectMapper) }
+            routing {
+                get<OptionalJacksonParams>("/users") { requestParam ->
+                    if (requestParam.sortBy == null) noContent() else badRequest()
+                }
+            }
+        }
+
+        assertEquals(HttpStatusCode.NoContent, client.get("/users").status)
+    }
+
+    @Test
     fun `binds json property names`() = testApplication {
         val objectMapper = ObjectMapper().registerKotlinModule()
 
@@ -38,3 +54,5 @@ class JacksonRequestParamBinderTest {
 }
 
 data class JacksonParams(@field:JsonProperty("sort_by") val sortBy: String)
+
+data class OptionalJacksonParams(val sortBy: String? = null)

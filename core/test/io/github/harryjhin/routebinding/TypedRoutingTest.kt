@@ -1,6 +1,7 @@
 package io.github.harryjhin.routebinding
 
 import io.ktor.client.request.delete
+import io.ktor.client.request.get
 import io.ktor.client.request.head
 import io.ktor.client.request.options
 import io.ktor.client.request.patch
@@ -21,6 +22,19 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TypedRoutingTest {
+    @Test
+    fun `typed get binds omitted query parameters to their defaults`() = testApplication {
+        application {
+            routing {
+                get<OptionalUserParams>("/users") { requestParam ->
+                    if (requestParam.role == null && !requestParam.includeDetails) noContent() else badRequest()
+                }
+            }
+        }
+
+        assertEquals(HttpStatusCode.NoContent, client.get("/users").status)
+    }
+
     @Test
     fun `typed post binds request parameter and request body`() = testApplication {
         application {
@@ -168,6 +182,11 @@ class TypedRoutingTest {
 }
 
 data class UserParams(val role: String)
+
+data class OptionalUserParams(
+    val role: String? = null,
+    val includeDetails: Boolean = false,
+)
 
 @Serializable
 data class UserRegisterRequest(val name: String)

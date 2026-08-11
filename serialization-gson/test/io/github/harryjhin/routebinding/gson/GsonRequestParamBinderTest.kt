@@ -19,6 +19,22 @@ import kotlin.test.assertEquals
 
 class GsonRequestParamBinderTest {
     @Test
+    fun `binds omitted nullable query parameters to their defaults`() = testApplication {
+        val gson = GsonBuilder().create()
+
+        application {
+            install(RouteBinding) { gson(gson) }
+            routing {
+                get<OptionalGsonParams>("/users") { requestParam ->
+                    if (requestParam.sortBy == null) noContent() else badRequest()
+                }
+            }
+        }
+
+        assertEquals(HttpStatusCode.NoContent, client.get("/users").status)
+    }
+
+    @Test
     fun `binds configured field naming policy`() = testApplication {
         val gson = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
 
@@ -37,3 +53,5 @@ class GsonRequestParamBinderTest {
 }
 
 data class GsonParams(val sortBy: String)
+
+data class OptionalGsonParams(val sortBy: String? = null)

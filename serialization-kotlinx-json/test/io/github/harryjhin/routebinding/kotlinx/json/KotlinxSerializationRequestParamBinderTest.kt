@@ -19,6 +19,22 @@ import kotlin.test.assertEquals
 
 class KotlinxSerializationRequestParamBinderTest {
     @Test
+    fun `binds omitted nullable query parameters to their defaults`() = testApplication {
+        val json = Json
+
+        application {
+            install(RouteBinding) { kotlinxSerialization(json) }
+            routing {
+                get<OptionalKotlinxParams>("/users") { requestParam ->
+                    if (requestParam.sortBy == null) noContent() else badRequest()
+                }
+            }
+        }
+
+        assertEquals(HttpStatusCode.NoContent, client.get("/users").status)
+    }
+
+    @Test
     fun `binds serial names and repeated query parameters`() = testApplication {
         val json = Json
 
@@ -45,3 +61,6 @@ data class KotlinxParams(
     @SerialName("sort_by") val sortBy: String,
     val tags: List<String>,
 )
+
+@Serializable
+data class OptionalKotlinxParams(val sortBy: String? = null)

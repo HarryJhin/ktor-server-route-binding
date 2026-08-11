@@ -27,7 +27,7 @@ fun main() {
         }
         routing {
             get<UserQuery>("/users/{id}") { params ->
-                ok { UserResponse(params.id, params.includeDetails) }
+                ok { UserResponse(params.id, params.includeDetails, role = params.role) }
             }
             post<UserRole, RegisterUserRequest>("/users") { params, body ->
                 created { UserResponse(body.id, params.includeDetails, body.name, params.role) }
@@ -40,6 +40,7 @@ fun main() {
 data class UserQuery(
     val id: Long,
     val includeDetails: Boolean = false,
+    val role: String? = null,
 )
 
 @Serializable
