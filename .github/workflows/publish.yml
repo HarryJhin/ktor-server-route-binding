@@ -1,0 +1,33 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Verify release version
+        run: |
+          expected_version="${GITHUB_REF_NAME#v}"
+          configured_version="$(sed -n 's/^    version: //p' library.module-template.yaml)"
+          test "$expected_version" = "$configured_version"
+
+      - name: Test
+        run: ./kotlin test
+
+      - name: Upload to Maven Central
+        run: ./kotlin publish mavenCentral
+        env:
+          KOTLIN_TOOLCHAIN_MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          KOTLIN_TOOLCHAIN_MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          KOTLIN_TOOLCHAIN_SIGNING_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          KOTLIN_TOOLCHAIN_SIGNING_KEY_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
