@@ -1,5 +1,7 @@
 # Ktor Server Route Binding
 
+[한국어](README.ko.md)
+
 [![Kotlin](https://img.shields.io/badge/kotlin-2.3.21-blue.svg?logo=kotlin)](https://kotlinlang.org)
 [![Ktor Compatibility](https://github.com/HarryJhin/ktor-server-route-binding/actions/workflows/ktor-compatibility.yml/badge.svg?branch=main)](https://github.com/HarryJhin/ktor-server-route-binding/actions/workflows/ktor-compatibility.yml)
 [![Ktor](https://img.shields.io/badge/Ktor-3.0%E2%80%933.5-087CFA?logo=ktor&logoColor=white)](https://github.com/HarryJhin/ktor-server-route-binding/blob/main/.github/workflows/ktor-compatibility.yml)
@@ -23,6 +25,9 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation")
 }
 ```
+
+> [!TIP]
+> Keep every Ktor dependency versionless. The BOM selects one compatible Ktor version for the whole application.
 
 Add one binder module only when its serialization policy should also bind path and query parameters.
 
@@ -124,6 +129,9 @@ Choose **Route Binding** when you want to keep existing Ktor routes and replace 
 
 Route Binding intentionally does not provide `@Resource`, nested route modeling, or reverse URL generation. It complements normal Ktor routing rather than replacing the Resources API.
 
+> [!IMPORTANT]
+> Choose Resources for typed URLs and reusable route contracts. Choose Route Binding to add typed parameter binding to existing Ktor routes without changing their route model.
+
 ## Optional query parameters
 
 Use Kotlin defaults to make path and query parameters optional. This keeps the DTO contract explicit and works with the built-in reflection binder and every serialization binder.
@@ -143,6 +151,9 @@ data class UserFilter(
 
 Use parameter-only routes for methods without a request body. Use one type parameter for a body-only route, or two type parameters for a route with both parameters and a body.
 
+<details>
+<summary>Show all typed HTTP method variations</summary>
+
 ```kotlin
 routing {
     get<UserParams>("/users/{id}") { params -> ok { findUser(params.id) } }
@@ -160,6 +171,8 @@ routing {
     patch<UserParams, UpdateUserRequest>("/users/{id}") { params, body -> ok { updateUser(params.id, body) } }
 }
 ```
+
+</details>
 
 ## Serialization modules
 
@@ -206,6 +219,9 @@ See each sample's README for `curl` requests.
 
 ## Snapshot releases
 
+<details>
+<summary>Publish or consume a development Snapshot</summary>
+
 Central Portal SNAPSHOT versions may be replaced and expire after the repository retention period. The repository's [snapshot publishing script](scripts/publish-snapshot.sh) publishes every module after running the test suite.
 
 To consume a Snapshot, add the Central Portal Snapshot repository before `mavenCentral()` and replace `<version>` in the dependency coordinates with the Snapshot version.
@@ -225,6 +241,8 @@ repositories {
 ```
 
 When the required Toolchain environment variables are absent, the script reads the existing Gradle properties `mavenCentralUsername`, `mavenCentralPassword`, `signingInMemoryKey`, and `signingInMemoryKeyPassword` from `$GRADLE_USER_HOME/gradle.properties` or `~/.gradle/gradle.properties`.
+
+</details>
 
 ## License
 
