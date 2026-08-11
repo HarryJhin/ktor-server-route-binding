@@ -104,6 +104,24 @@ data class UserResponse(
 
 Route Binding does not replace Ktor routing, request validation, authentication, or content negotiation.
 
+## Route Binding or Ktor Resources?
+
+[Ktor Resources](https://ktor.io/docs/server-resources.html) and Route Binding both expose path and query values as typed Kotlin objects, but they model different boundaries.
+
+| Concern | Route Binding | Ktor Resources |
+| --- | --- | --- |
+| Route declaration | Keeps Ktor's string route DSL: `get("/users/{id}")` | Defines a route as an `@Resource` class, often with nested classes |
+| Parameter conversion | Uses the installed binder: basic reflection, kotlinx.serialization JSON, Gson, or Jackson | Uses the Resources serialization model and `@Serializable` resource classes |
+| Request body | Receives a parameter DTO and a body DTO together: `post<Params, Body>` | Receives the resource object; read the body separately with `call.receive()` |
+| Serializer policy | Reuses the same serializer instance as `ContentNegotiation` | Uses kotlinx.serialization for resource classes |
+| Reverse routing | Does not generate URLs | Generates typed URLs with `href()` |
+
+Choose **Ktor Resources** when the route itself is a reusable contract: you need nested resource types, typed URL generation, or shared client/server resource definitions.
+
+Choose **Route Binding** when you want to keep existing Ktor routes and replace repetitive `call.parameters[...]` extraction with a DTO. It is especially useful when an application already uses Gson or Jackson, or when a route must receive typed path/query parameters and a typed request body in one handler.
+
+Route Binding intentionally does not provide `@Resource`, nested route modeling, or reverse URL generation. It complements normal Ktor routing rather than replacing the Resources API.
+
 ## Optional query parameters
 
 Use Kotlin defaults to make path and query parameters optional. This keeps the DTO contract explicit and works with the built-in reflection binder and every serialization binder.
