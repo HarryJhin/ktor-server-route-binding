@@ -134,13 +134,16 @@ Pass the same `Json`, `ObjectMapper`, or `Gson` instance to both plugins. That k
 
 ## Samples
 
-The [`samples`](samples) module is a runnable Ktor application that demonstrates typed path/query binding and request-body handling. It resolves Route Binding from the Central Portal SNAPSHOT repository, not from local project modules.
+Each binder has a runnable Ktor application with the same typed path/query binding, optional query parameter, and request-body handling cases. The samples resolve Route Binding from the Central Portal SNAPSHOT repository, not local project modules. Run one sample at a time; each listens on `http://localhost:8080`.
 
-```bash
-./kotlin run --module samples
-```
+| Binder | Module | Run |
+| --- | --- | --- |
+| kotlinx.serialization JSON | [`samples`](samples) | `./kotlin run --module samples` |
+| Gson | [`samples-gson`](samples-gson) | `./kotlin run --module samples-gson` |
+| Jackson | [`samples-jackson`](samples-jackson) | `./kotlin run --module samples-jackson` |
+| Default reflection binder | [`samples-reflection`](samples-reflection) | `./kotlin run --module samples-reflection` |
 
-The server listens on `http://localhost:8080`. See the [sample README](samples/README.md) for `curl` requests.
+See each sample's README for `curl` requests.
 
 ## Snapshot releases
 
