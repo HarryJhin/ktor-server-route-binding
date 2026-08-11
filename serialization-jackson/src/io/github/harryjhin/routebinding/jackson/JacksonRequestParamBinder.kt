@@ -7,6 +7,7 @@ import io.ktor.http.Parameters
 import kotlin.reflect.KType
 import kotlin.reflect.jvm.javaType
 
+/** Binds path and query parameters with the supplied [ObjectMapper]. */
 class JacksonRequestParamBinder(
     private val objectMapper: ObjectMapper,
 ) : RequestParamBinder {

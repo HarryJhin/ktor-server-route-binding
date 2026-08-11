@@ -5,7 +5,12 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.createApplicationPlugin
 import io.ktor.util.AttributeKey
 
-/** Installs a request-parameter binder for typed routes. */
+/**
+ * Configures typed routes to bind path and query parameters.
+ *
+ * The plugin uses the configured [RequestParamBinder]. When no binder is configured, it uses the built-in
+ * reflection binder.
+ */
 val RouteBinding = createApplicationPlugin(
     name = "RouteBinding",
     createConfiguration = ::RouteBindingConfig,

@@ -14,6 +14,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.serializer
 import kotlin.reflect.KType
 
+/** Binds path and query parameters with the supplied kotlinx.serialization [Json] instance. */
 class KotlinxSerializationRequestParamBinder(
     private val json: Json,
 ) : RequestParamBinder {

@@ -9,6 +9,7 @@ import kotlin.ExperimentalStdlibApi
 import kotlin.reflect.KType
 import kotlin.reflect.jvm.javaType
 
+/** Binds path and query parameters with the supplied [Gson] instance. */
 class GsonRequestParamBinder(
     private val gson: Gson,
 ) : RequestParamBinder {
