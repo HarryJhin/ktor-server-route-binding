@@ -1,0 +1,2 @@
+dependencies:
+  - bom: io.ktor:ktor-bom:3.4.3

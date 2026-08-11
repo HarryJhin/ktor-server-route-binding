@@ -1,0 +1,31 @@
+product: jvm/lib
+
+apply:
+  - ../library.module-template.yaml
+  - ../ktor.module-template.yaml
+
+description: Jackson request-parameter binder for Ktor Server Route Binding.
+
+repositories:
+  - https://repo.maven.apache.org/maven2
+  - id: centralSnapshots
+    url: https://central.sonatype.com/repository/maven-snapshots/
+    publish: true
+    credentials:
+      file: ../.central-snapshots.properties
+      usernameKey: mavenCentralUsername
+      passwordKey: mavenCentralPassword
+
+dependencies:
+  - ../core
+  - io.ktor:ktor-serialization-jackson: compile-only
+
+test-dependencies:
+  - io.ktor:ktor-server-content-negotiation
+  - io.ktor:ktor-serialization-jackson
+  - io.ktor:ktor-server-test-host
+
+settings:
+  ktor: enabled
+  publishing:
+    artifactId: ktor-server-route-binding-serialization-jackson

@@ -1,0 +1,6 @@
+modules:
+  - ./core
+  - ./samples
+  - ./serialization-gson
+  - ./serialization-jackson
+  - ./serialization-kotlinx-json

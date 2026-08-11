@@ -1,0 +1,16 @@
+settings:
+  publishing:
+    enabled: true
+    group: io.github.harryjhin
+    version: 0.1.0
+    mavenCentral: enabled
+    signArtifacts: true
+    publishSources: true
+    pom:
+      url: https://github.com/HarryJhin/ktor-server-route-binding
+      scm: https://github.com/HarryJhin/ktor-server-route-binding.git
+      developers:
+        - name: Jinhyun Ju
+      licenses:
+        - name: Apache-2.0
+          url: https://www.apache.org/licenses/LICENSE-2.0

@@ -1,0 +1,33 @@
+product: jvm/lib
+
+apply:
+  - ../library.module-template.yaml
+  - ../ktor.module-template.yaml
+
+description: Typed path and query parameter binding for Ktor server routes.
+
+repositories:
+  - https://repo.maven.apache.org/maven2
+  - id: centralSnapshots
+    url: https://central.sonatype.com/repository/maven-snapshots/
+    publish: true
+    credentials:
+      file: ../.central-snapshots.properties
+      usernameKey: mavenCentralUsername
+      passwordKey: mavenCentralPassword
+
+dependencies:
+  - io.ktor:ktor-server-core: compile-only
+  - $kotlin.reflect
+
+test-dependencies:
+  - io.ktor:ktor-server-content-negotiation
+  - io.ktor:ktor-serialization-kotlinx-json
+  - io.ktor:ktor-server-test-host
+
+settings:
+  ktor: enabled
+  kotlin:
+    serialization: json
+  publishing:
+    artifactId: ktor-server-route-binding
