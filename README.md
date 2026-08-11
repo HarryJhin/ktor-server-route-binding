@@ -1,6 +1,8 @@
 # Ktor Server Route Binding
 
 [![Kotlin](https://img.shields.io/badge/kotlin-2.3.21-blue.svg?logo=kotlin)](https://kotlinlang.org)
+[![Ktor Compatibility](https://github.com/HarryJhin/ktor-server-route-binding/actions/workflows/ktor-compatibility.yml/badge.svg?branch=main)](https://github.com/HarryJhin/ktor-server-route-binding/actions/workflows/ktor-compatibility.yml)
+[![Ktor](https://img.shields.io/badge/Ktor-3.0%E2%80%933.5-087CFA?logo=ktor&logoColor=white)](https://github.com/HarryJhin/ktor-server-route-binding/blob/main/.github/workflows/ktor-compatibility.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.harryjhin/ktor-server-route-binding?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.harryjhin/ktor-server-route-binding)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
