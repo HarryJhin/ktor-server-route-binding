@@ -1,6 +1,6 @@
 # Samples
 
-Runnable Ktor Server Route Binding examples. This module is not published and resolves Route Binding from the Central Portal SNAPSHOT repository instead of local project modules.
+Runnable Ktor Server Route Binding example. This module is not published and resolves Route Binding from Maven Central instead of local project modules.
 
 Run the server from the repository root:
 

@@ -193,7 +193,7 @@ Helpers cover successful responses (`ok`, `created`, `accepted`, `noContent`), c
 
 ## Samples
 
-Each binder has a runnable Ktor application with the same typed path/query binding, optional query parameter, and request-body handling cases. The samples resolve Route Binding from the Central Portal SNAPSHOT repository, not local project modules. Run one sample at a time; each listens on `http://localhost:8080`.
+Each binder has a runnable Ktor application with the same typed path/query binding, optional query parameter, and request-body handling cases. The samples resolve the released Route Binding artifacts from Maven Central, not local project modules. Run one sample at a time; each listens on `http://localhost:8080`.
 
 | Binder | Module | Run |
 | --- | --- | --- |
