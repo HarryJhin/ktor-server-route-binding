@@ -123,6 +123,51 @@ Route Binding does not replace Ktor routing, request validation, authentication,
 | Serializer policy | Reuses the same serializer instance as `ContentNegotiation` | Uses kotlinx.serialization for resource classes |
 | Reverse routing | Does not generate URLs | Generates typed URLs with `href()` |
 
+The same endpoint shows the difference in where each API puts the route contract and request body handling.
+
+<table>
+  <thead>
+    <tr>
+      <th>Route Binding</th>
+      <th>Ktor Resources</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td valign="top"><p>Keeps the existing path string and receives parameters and body together.</p><pre lang="kotlin">@Serializable
+data class UpdateUserParams(
+    val id: Long,
+    val includeDetails: Boolean = false,
+)
+
+@Serializable
+data class UpdateUserRequest(val name: String)
+
+routing {
+    put&lt;UpdateUserParams, UpdateUserRequest&gt;("/users/{id}") { params, body -&gt;
+        ok { updateUser(params.id, body, params.includeDetails) }
+    }
+}</pre></td>
+      <td valign="top"><p>Makes the route a class and receives the body separately.</p><pre lang="kotlin">@Resource("/users/{id}")
+data class UpdateUser(
+    val id: Long,
+    val includeDetails: Boolean = false,
+)
+
+@Serializable
+data class UpdateUserRequest(val name: String)
+
+install(Resources)
+routing {
+    put&lt;UpdateUser&gt; { resource -&gt;
+        val body = call.receive&lt;UpdateUserRequest&gt;()
+        call.respond(updateUser(resource.id, body, resource.includeDetails))
+    }
+}</pre></td>
+    </tr>
+  </tbody>
+</table>
+
 Choose **Ktor Resources** when the route itself is a reusable contract: you need nested resource types, typed URL generation, or shared client/server resource definitions.
 
 Choose **Route Binding** when you want to keep existing Ktor routes and replace repetitive `call.parameters[...]` extraction with a DTO. It is especially useful when an application already uses Gson or Jackson, or when a route must receive typed path/query parameters and a typed request body in one handler.

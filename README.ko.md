@@ -123,6 +123,51 @@ Route Binding은 Ktor routing, request validation, authentication, content negot
 | serializer 정책 | `ContentNegotiation`과 같은 serializer 인스턴스 재사용 | resource class에 kotlinx.serialization 사용 |
 | reverse routing | URL을 생성하지 않음 | `href()`로 타입 안전한 URL 생성 |
 
+같은 endpoint를 작성해 보면 route 계약과 request body 처리 위치가 어떻게 다른지 알 수 있습니다.
+
+<table>
+  <thead>
+    <tr>
+      <th>Route Binding</th>
+      <th>Ktor Resources</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td valign="top"><p>기존 path 문자열을 유지하고 parameter와 body를 함께 받습니다.</p><pre lang="kotlin">@Serializable
+data class UpdateUserParams(
+    val id: Long,
+    val includeDetails: Boolean = false,
+)
+
+@Serializable
+data class UpdateUserRequest(val name: String)
+
+routing {
+    put&lt;UpdateUserParams, UpdateUserRequest&gt;("/users/{id}") { params, body -&gt;
+        ok { updateUser(params.id, body, params.includeDetails) }
+    }
+}</pre></td>
+      <td valign="top"><p>route를 class로 모델링하고 body를 별도로 받습니다.</p><pre lang="kotlin">@Resource("/users/{id}")
+data class UpdateUser(
+    val id: Long,
+    val includeDetails: Boolean = false,
+)
+
+@Serializable
+data class UpdateUserRequest(val name: String)
+
+install(Resources)
+routing {
+    put&lt;UpdateUser&gt; { resource -&gt;
+        val body = call.receive&lt;UpdateUserRequest&gt;()
+        call.respond(updateUser(resource.id, body, resource.includeDetails))
+    }
+}</pre></td>
+    </tr>
+  </tbody>
+</table>
+
 route 자체가 재사용 가능한 계약이어야 하거나 중첩 resource type, 타입 안전 URL 생성, client/server 간 resource 정의 공유가 필요하면 **Ktor Resources**를 선택하세요.
 
 기존 Ktor route를 유지하면서 반복적인 `call.parameters[...]` 추출을 DTO로 바꾸고 싶다면 **Route Binding**을 선택하세요. 특히 Gson·Jackson을 이미 사용하거나, 하나의 handler에서 타입이 지정된 path/query parameter와 request body를 함께 받아야 할 때 적합합니다.
